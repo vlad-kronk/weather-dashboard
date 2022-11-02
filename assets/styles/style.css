@@ -1,0 +1,19 @@
+:root {
+    --background-md-light: #3F4F50;
+    --background-md-dark: #2D3839;
+    --background-light: #637C7E;
+    --background-dark: #242D2D;
+    --dropdown-text-color: #3F4F50;
+    --dropdown-background: #BBB4CF;
+    --base-text-color: #DDDAE7;
+    --placeholder-text-color: #9A8FB7;
+    --button-text-color: #DDDAE7;
+    --date-text-color: #BCB4CF;
+}
+
+body {
+    background-color: var(--background-md-light);
+    color: var(--base-text-color);
+    font-family: "Inter", sans-serif;
+}
+
