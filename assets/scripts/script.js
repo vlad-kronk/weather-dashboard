@@ -17,6 +17,15 @@ var todayWindEl = document.querySelector(".today-wind");
 var todayHumidityEl = document.querySelector(".today-humidity");
 var todayVisibilityEl = document.querySelector(".today-visibility");
 
+//DOM hooks for forecast cards
+var forecastDayEls = document.querySelectorAll(".forecast-day");
+var forecastDateEls = document.querySelectorAll(".forecast-date");
+var forecastIconEls = document.querySelectorAll(".icon-sm");
+var forecastHighEls = document.querySelectorAll(".forecast-high");
+var forecastLowEls = document.querySelectorAll(".forecast-low");
+var forecastWindEls = document.querySelectorAll(".forecast-wind");
+var forecastHumidityEls = document.querySelectorAll(".forecast-humidity");
+
 var clientSearchHistory = JSON.parse(localStorage.getItem("w-search-hist")) || [];
 // makes sure the local storage has an array in it
 localStorage.setItem("w-search-hist", JSON.stringify(clientSearchHistory));
@@ -60,13 +69,16 @@ function addToSearchHistory(item) {
 // updates the search history UI
 function refreshSearchHistoryElement() {
 
+    // remove current dropdown elements
     while (searchHistoryListEl.firstChild) {
         searchHistoryListEl.removeChild(searchHistoryListEl.firstChild);
     }
 
+    // grab history from storage and iterate through it
     clientSearchHistory = JSON.parse(localStorage.getItem("w-search-hist"))
     clientSearchHistory.forEach(item => {
 
+        // create a list element with the history data and append it to dropdown parent
         // <li class="history-item">San Francisco</li>
         var temp = document.createElement("li");
         temp.classList.add("history-item");
@@ -75,6 +87,8 @@ function refreshSearchHistoryElement() {
         searchHistoryListEl.appendChild(temp);
     });
 
+    // add event listeners to all search history items
+    // on click, submit a form where searchFormEl.value is the value of the history item
     document.querySelectorAll(".history-item").forEach(item => {
         item.addEventListener("click", () => {
             // console.log("user clicked " + item.textContent);
@@ -86,40 +100,111 @@ function refreshSearchHistoryElement() {
 
 function updateTodayCard(cityName) {
 
-    
-
     // gets CURRENT weather for city
     var fetchURL = "https://api.openweathermap.org/data/2.5/weather?q="
      + cityName + "&lang=en&units=imperial&appid=335df852494df73f05faf8726e22ed3a";
 
     fetch(fetchURL).then((response) => response.json()).then((data) => {
-        console.log(data);
+
+        // console.log(data);
 
         //update all elements in today card
         cityHeaderEl.textContent = data.name;
-        todayDateEl.textContent = moment(data.dt + data.timezone, "X").format("dddd, MMMM Do"); // format: "Thursday, November 3rd"
+        todayDateEl.textContent = moment(data.dt + data.timezone, "X").format("dddd, MMMM Do");
+        
         todayIconEl.style.backgroundImage = "url('http://openweathermap.org/img/wn/"
         + data.weather[0].icon + "@4x.png')";
+        
         todayTempEl.innerHTML = "<span class='today-current-temp'>" + Math.floor(data.main.temp)
         + "°</span>, feels like " + Math.floor(data.main.feels_like) + "°";
-        todayHighEl.textContent = "High: " + Math.floor(data.main.temp_max) + "°"
-        todayLowEl.textContent = "Low: " + Math.floor(data.main.temp_min) + "°";
+        
+        todayHighEl.textContent = "High: " + Math.round(data.main.temp_max) + "°"
+        todayLowEl.textContent = "Low: " + Math.round(data.main.temp_min) + "°";
         todayWindEl.textContent = "Wind: " + data.wind.speed + "mph";
         todayHumidityEl.textContent = "Humidity: " + data.main.humidity + "%";
         todayVisibilityEl.textContent = "Visibility: " + (data.visibility / 1000).toFixed(1) + "km";
+
     });
+}
+
+function updateForecastCard(data, index) {
+    
+    console.log(data);
+
+    // calculate the highest and lowest temps of the day
+    var dayHigh = data[0].main.temp;
+    var dayLow = data[0].main.temp;
+    for (var i = 1; i < data.length; i++) {
+        var temp = data[i].main.temp;
+        if (temp > dayHigh) { dayHigh = temp; }
+        if (temp < dayLow) { dayLow = temp; }
+    }
+
+    // calculate average wind speed
+    var avgWind = 0;
+    data.forEach(entry => {
+        avgWind += entry.wind.speed;
+    });
+    avgWind = Math.floor(avgWind / 8);
+
+    // calculate average humidity
+    var avgHumidity = 0;
+    data.forEach(entry => {
+        avgHumidity += entry.main.humidity;
+    });
+    avgHumidity = Math.floor(avgHumidity / 8);
+
+    // update each element in the forecast card at [index]
+    forecastDayEls[index].textContent = moment(data[4].dt, "X").format("dddd");
+    forecastDateEls[index].textContent = moment(data[4].dt, "X").format("MMM. D");
+
+    forecastIconEls[index].style.backgroundImage = "url('http://openweathermap.org/img/wn/"
+    + data[4].weather[0].icon.substring(0,2) + "d@4x.png')"; // gets weather icon from 12:00pm, forces daytime icon
+
+    forecastHighEls[index].textContent = "High: " + Math.round(dayHigh) + "°";
+    forecastLowEls[index].textContent = "Low: " + Math.round(dayLow) + "°";
+    forecastWindEls[index].textContent = "Wind: " + avgWind + "mph";
+    forecastHumidityEls[index].textContent = "Humidity: " + avgHumidity + "%";
+
+}
+
+function updateForecast(cityName) {
+
+    var fetchURL = "https://api.openweathermap.org/data/2.5/forecast?q="
+    + cityName + "&units=imperial&lang=en&appid=335df852494df73f05faf8726e22ed3a";
+
+    fetch(fetchURL).then((response) => response.json()).then((data) => {
+
+        // console.log(data);
+
+        var splicedData = [[],[],[],[],[]];
+
+        // separates response into days
+        for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < 8; j++) {
+                splicedData[i].push(data.list[(i*8)+j]);
+            }
+        }
+
+        // console.log(splicedData);
+
+        // update each forecast card
+        for (var i = 0; i < splicedData.length; i++) {
+            updateForecastCard(splicedData[i], i);
+        }
+        
+        document.querySelector(".weather-content").classList.add("show-w");
+
+    })
+
 }
 
 function updateDash(cityName) {
 
-    // DOM hook for weather container
-    var weatherContainerEl = document.querySelector(".weather-content");
-
     updateTodayCard(cityName);
 
-    // show weather container
-    weatherContainerEl.classList.add("show-w"); // TODO: do this AFTER setting all the data
-    
+    updateForecast(cityName);
+
 }
 
 function onSearch(e) {
@@ -128,6 +213,8 @@ function onSearch(e) {
 
     // delete user's text
     e.target.children[0].value = "";
+
+    e.target.children[0].blur();
 
     // add search to local history and update the UI
     addToSearchHistory(cityName);
