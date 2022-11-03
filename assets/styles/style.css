@@ -53,6 +53,7 @@ header h1 {
     height: 20px;
     border-radius: 20px;
     font-family: "Inter", sans-serif;
+    background-color: var(--base-text-color);
 }
 
 /* change placeholder text in form cell */
@@ -136,8 +137,8 @@ input:focus {
 }
 
 .icon-sm {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
 }
 
 /* big flex container to hold both forecasts separately */
@@ -147,6 +148,9 @@ input:focus {
     justify-content: space-between;
     margin: 50px auto;
 }
+
+
+/* ---------- today's data ---------- */
 
 .today-content {
     display: block;
@@ -191,6 +195,48 @@ input:focus {
     font-weight: bold;
 }
 
+/* ---------- this week's data ---------- */
+
+.forecast-content-flex {
+    display: flex;
+    flex-flow: row wrap;
+    width: 70%;
+    margin-left: 10px;
+}
+
 .forecast-card {
     background-color: var(--background-dark);
+    height: 290px;
+    width: 30%;
+    margin: 0px 10px 20px;
+    border-radius: 20px;
+}
+
+.forecast-header-flex {
+    display: flex;
+    width: 85%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 25px;
+}
+
+.forecast-header-text-container {
+    color: var(--date-text-color);
+}
+
+.forecast-header-text-container h4 {
+    margin-bottom: 5px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.forecast-header-text-container h5 {
+    margin-left: 2px;
+}
+
+.forecast-card-info {
+    margin-left: 25px;
+    font-size: 20px;
+    line-height: 40px;
 }
