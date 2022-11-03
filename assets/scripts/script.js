@@ -203,6 +203,7 @@ function updateForecast(cityName) {
         
         // show weather dash ONLY after all responses have been processed
         document.querySelector(".weather-content").classList.add("show-w");
+        // searchBarEl.focus();
 
     })
 
@@ -214,17 +215,24 @@ function updateDash(cityName) {
     updateForecast(cityName);
 }
 
+function forceTitleCase(str) {
+    var arr = str.split(" ");
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].length > 1) { arr[i] = arr[i][0].toUpperCase() + arr[i].substring(1).toLowerCase(); }
+        else { arr[i] = arr[i].toUpperCase(); }
+    }
+    return arr.join(" ");
+}
+
 function onSearch(e) {
     e.preventDefault();
 
-    var cityName = e.target.children[0].value;
+    var cityName = forceTitleCase(e.target.children[0].value);
 
     console.log("searched for " + cityName);
 
     // delete user's text
     e.target.children[0].value = "";
-
-    e.target.children[0].blur();
 
     // add search to local history and update the UI
     addToSearchHistory(cityName);
