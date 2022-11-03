@@ -134,6 +134,7 @@ input:focus {
 .icon-sm {
     width: 80px;
     height: 80px;
+    margin-right: 17px
 }
 
 /* big flex container to hold both forecasts separately */
@@ -213,7 +214,7 @@ input:focus {
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-    padding: 0 25px;
+    padding: 0 37px;
 }
 
 .forecast-header-text-container {
@@ -231,7 +232,7 @@ input:focus {
 }
 
 .forecast-card-info {
-    margin-left: 25px;
+    margin-left: 37px;
     font-size: 20px;
     line-height: 40px;
 }

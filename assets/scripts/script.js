@@ -1,8 +1,10 @@
 // API key: 335df852494df73f05faf8726e22ed3a
 
 // DOM hooks
+var searchContentEl = document.querySelector(".search-content");
 var searchFormEl = document.querySelector(".search-form")
 var searchBarEl = document.querySelector("#searchBarContent")
+var submitBtnEl = document.querySelector("#submitBtn");
 var dropdownEl = document.querySelector(".history-dropdown")
 
 // DOM hooks for today card
@@ -36,8 +38,8 @@ function init() {
 
     // show/hide the dropdown on search bar focus/unfocus
     // only show the dropdown if the user has search history
-    searchBarEl.addEventListener("focus", () => { if (clientSearchHistory.length > 0) { dropdownEl.classList.add("show-dd"); }});
-    searchBarEl.addEventListener("blur", () => { dropdownEl.classList.remove("show-dd"); });
+    searchBarEl.addEventListener("mouseenter", () => { if (clientSearchHistory.length > 0) { dropdownEl.classList.add("show-dd"); }});
+    searchContentEl.addEventListener("mouseleave", () => { dropdownEl.classList.remove("show-dd"); });
     refreshSearchHistoryElement();
 
     // console.log(clientSearchHistory);
@@ -85,17 +87,20 @@ function refreshSearchHistoryElement() {
         temp.textContent = item;
 
         searchHistoryListEl.appendChild(temp);
+
+        // if a history item is clicked, fill the search bar with its value
+        // and simulate a click on search button. TODO: polish? seems scuffed
+        temp.addEventListener("click", () => {
+            searchFormEl.children[0].value = temp.textContent;
+            submitBtnEl.click();
+        })
     });
 
     // add event listeners to all search history items
     // on click, submit a form where searchFormEl.value is the value of the history item
-    document.querySelectorAll(".history-item").forEach(item => {
-        item.addEventListener("click", () => {
-            // console.log("user clicked " + item.textContent);
-            searchFormEl.children[0].value = item.textContent;
-            searchFormEl.submit();
-        })
-    })
+    // document.querySelectorAll(".history-item").forEach(item => {
+        
+    // })
 }
 
 function updateTodayCard(cityName) {
@@ -127,9 +132,10 @@ function updateTodayCard(cityName) {
     });
 }
 
+// update individual forecast cards
 function updateForecastCard(data, index) {
     
-    console.log(data);
+    // console.log(data);
 
     // calculate the highest and lowest temps of the day
     var dayHigh = data[0].main.temp;
@@ -158,8 +164,9 @@ function updateForecastCard(data, index) {
     forecastDayEls[index].textContent = moment(data[4].dt, "X").format("dddd");
     forecastDateEls[index].textContent = moment(data[4].dt, "X").format("MMM. D");
 
+    // gets weather icon from 12:00pm, forces daytime icon
     forecastIconEls[index].style.backgroundImage = "url('http://openweathermap.org/img/wn/"
-    + data[4].weather[0].icon.substring(0,2) + "d@4x.png')"; // gets weather icon from 12:00pm, forces daytime icon
+    + data[4].weather[0].icon.substring(0,2) + "d@4x.png')";
 
     forecastHighEls[index].textContent = "High: " + Math.round(dayHigh) + "°";
     forecastLowEls[index].textContent = "Low: " + Math.round(dayLow) + "°";
@@ -168,6 +175,7 @@ function updateForecastCard(data, index) {
 
 }
 
+// update all forecast cards
 function updateForecast(cityName) {
 
     var fetchURL = "https://api.openweathermap.org/data/2.5/forecast?q="
@@ -193,23 +201,25 @@ function updateForecast(cityName) {
             updateForecastCard(splicedData[i], i);
         }
         
+        // show weather dash ONLY after all responses have been processed
         document.querySelector(".weather-content").classList.add("show-w");
 
     })
 
 }
 
+// updates today card and all forecast cards
 function updateDash(cityName) {
-
     updateTodayCard(cityName);
-
     updateForecast(cityName);
-
 }
 
 function onSearch(e) {
     e.preventDefault();
+
     var cityName = e.target.children[0].value;
+
+    console.log("searched for " + cityName);
 
     // delete user's text
     e.target.children[0].value = "";
