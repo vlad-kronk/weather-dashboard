@@ -2,7 +2,7 @@
     --background-md-light: #3F4F50;
     --background-md-dark: #2D3839;
     --background-light: #637C7E;
-    --background-light-hover: #779294;
+    --background-light-hover: #6d8586;
     --background-dark: #242D2D;
     --dropdown-text-color: #3F4F50;
     --dropdown-background: #BBB4CF;
@@ -29,13 +29,18 @@ header h1 {
 
 
 
-
+/* need to position this to get dropdown */
+.search-content {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+}
 
 /* flexbox container for search form */
 .search-form {
     display: flex;
     width: 750px;
-    margin: 10px auto 0px auto;
+    margin: 10px auto 0 auto;
     justify-content: space-between;
 }
 
@@ -46,7 +51,7 @@ header h1 {
     border: none;
     height: 20px;
     border-radius: 20px;
-    position: relative;
+    font-family: "Inter", sans-serif;
 }
 
 /* change placeholder text in form cell */
@@ -78,19 +83,38 @@ input:focus {
     border: none;
     background-color: var(--background-light);
     color: var(--button-text-color);
-    transition: 0.2s ease;
+    font-family: "Inter", sans-serif;
 }
 
 #submitBtn:hover {
     cursor: pointer;
     background-color: var(--background-light-hover);
-    transition: 0.05s ease;
 }
 
+/* positions dropdown directly beneath search bar */
 .history-dropdown {
-    display: flex;
+    display: none; /* will change with JS when search bar is focused */
     position: absolute;
     background-color: var(--dropdown-background);
     color: var(--dropdown-text-color);
-    
+    border-radius: 20px;
+    padding: 10px 0;
+    width: 586px;
+    box-shadow: -8px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.history-dropdown li {
+    padding: 10px 20px;
+}
+
+/* helps user know these are links */
+.history-dropdown li:hover {
+    text-decoration: underline;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* use with JS to show dropdown when search bar is focused */
+.show {
+    display: block;
 }
