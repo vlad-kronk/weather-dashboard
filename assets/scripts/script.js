@@ -22,14 +22,21 @@ function init() {
 
 // update the search history with a new item AND update the UI
 function addToSearchHistory(item) {
-    if (clientSearchHistory.length < 8) {
-        // if the history is not full, unshift
-        clientSearchHistory.unshift(item);
-    } else {
-        // if the history is full, delete last item and unshift
-        clientSearchHistory.pop();
+
+    if (!clientSearchHistory.includes(item)) {
+        if (clientSearchHistory.length < 8) {
+            // if the history is not full, unshift
+            clientSearchHistory.unshift(item);
+        } else {
+            // if the history is full, delete last item and unshift
+            clientSearchHistory.pop();
+            clientSearchHistory.unshift(item);
+        }
+    } else if (clientSearchHistory[0] != item) {
+        clientSearchHistory.splice(clientSearchHistory.indexOf(item), 1);
         clientSearchHistory.unshift(item);
     }
+
     // update local storage with new search history and refresh the UI element
     localStorage.setItem("w-search-hist", JSON.stringify(clientSearchHistory));
     refreshSearchHistoryElement();
@@ -55,9 +62,9 @@ function refreshSearchHistoryElement() {
 
     document.querySelectorAll(".history-item").forEach(item => {
         item.addEventListener("click", () => {
-            console.log("user clicked " + item.textContent);
+            // console.log("user clicked " + item.textContent);
             searchFormEl.children[0].value = item.textContent;
-            // searchFormEl.submit();
+            searchFormEl.submit();
         })
     })
 }
@@ -76,10 +83,16 @@ function onSearch(e) {
 }
 
 function getCoords(cityName) {
+
+    var cityData;
+    
+    // get city coordinates from city name
     fetch("http://api.openweathermap.org/geo/1.0/direct?q="
         + cityName + "&limit=5&appid=335df852494df73f05faf8726e22ed3a")
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => { console.log(data[0]); cityData = data[0]; });
+
+    
 }
 
 function main() {
