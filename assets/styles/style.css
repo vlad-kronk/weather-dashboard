@@ -116,16 +116,11 @@ input:focus {
     cursor: pointer;
 }
 
-/* use with JS to show dropdown when search bar is focused */
-.show {
-    display: block;
-}
-
 /* ---------- weather data ---------- */
 
 /* all icon styles */
 .icon {
-    background-image: url("http://openweathermap.org/img/wn/10d@2x.png");
+    background-image: url("http://openweathermap.org/img/wn/10d@4x.png");
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -143,7 +138,7 @@ input:focus {
 
 /* big flex container to hold both forecasts separately */
 .weather-content {
-    display: flex;
+    display: none;
     width: 1350px;
     justify-content: space-between;
     margin: 50px auto;
@@ -239,4 +234,14 @@ input:focus {
     margin-left: 25px;
     font-size: 20px;
     line-height: 40px;
+}
+
+/* use with JS to show the dropdown */
+.show-dd {
+    display: block;
+}
+
+/* use with JS to show the weather content */
+.show-w {
+    display: flex;
 }
