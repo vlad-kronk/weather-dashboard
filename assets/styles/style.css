@@ -20,6 +20,8 @@ body {
     font-weight: 100;
 }
 
+/* ---------- title ---------- */
+
 header h1 {
     display: block;
     margin: 80px auto 50px auto;
@@ -27,11 +29,10 @@ header h1 {
     font-size: 40px;
 }
 
+/* ---------- search bar and dropdown ---------- */
 
-
-/* need to position this to get dropdown */
 .search-content {
-    position: relative;
+    position: relative;/* need to position this to get dropdown */
     width: fit-content;
     margin: 0 auto;
 }
@@ -117,4 +118,79 @@ input:focus {
 /* use with JS to show dropdown when search bar is focused */
 .show {
     display: block;
+}
+
+/* ---------- weather data ---------- */
+
+/* all icon styles */
+.icon {
+    background-image: url("http://openweathermap.org/img/wn/10d@2x.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.icon-lg {
+    width: 120px;
+    height: 120px;
+    margin-right: 10px;
+}
+
+.icon-sm {
+    width: 60px;
+    height: 60px;
+}
+
+/* big flex container to hold both forecasts separately */
+.weather-content {
+    display: flex;
+    width: 1350px;
+    justify-content: space-between;
+    margin: 50px auto;
+}
+
+.today-content {
+    display: block;
+    width: 30%;
+    height: 600px;
+    background-color: var(--background-md-dark);
+    border-radius: 20px;
+}
+
+/* flex container to hold the header text and the image */
+.today-header-flex {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.today-header-text-container {
+    margin-left: 30px;
+    color: var(--date-text-color);
+}
+
+.today-header-text-container h2 {
+    font-weight: bold;
+    font-size: 32px;
+    margin: 20px 0;
+}
+
+.today-header-text-container h3 {
+    font-size: 16px;
+}
+
+.today-info {
+    margin-left: 40px;
+    font-size: 32px;
+    line-height: 60px;
+}
+
+.today-current-temp {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.forecast-card {
+    background-color: var(--background-dark);
 }
