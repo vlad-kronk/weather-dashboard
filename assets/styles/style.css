@@ -2,6 +2,7 @@
     --background-md-light: #3F4F50;
     --background-md-dark: #2D3839;
     --background-light: #637C7E;
+    --background-light-hover: #779294;
     --background-dark: #242D2D;
     --dropdown-text-color: #3F4F50;
     --dropdown-background: #BBB4CF;
@@ -15,5 +16,81 @@ body {
     background-color: var(--background-md-light);
     color: var(--base-text-color);
     font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    font-weight: 100;
 }
 
+header h1 {
+    display: block;
+    margin: 80px auto 50px auto;
+    width: fit-content;
+    font-size: 40px;
+}
+
+
+
+
+
+/* flexbox container for search form */
+.search-form {
+    display: flex;
+    width: 750px;
+    margin: 10px auto 0px auto;
+    justify-content: space-between;
+}
+
+#searchBarContent {
+    display: block;
+    width: 550px;
+    padding: 10px 18px;
+    border: none;
+    height: 20px;
+    border-radius: 20px;
+    position: relative;
+}
+
+/* change placeholder text in form cell */
+#searchBarContent::placeholder {
+    color: var(--placeholder-text-color);
+    opacity: 1; /* for firefox */
+}
+
+/* ::placeholder doesn't work in Edge */
+#searchBarContent::-ms-input-placeholder {
+    color: var(--placeholder-text-color);
+}
+
+/* change text color of user input */
+input[type="text"] {
+    color: var(--background-dark);
+    font-size: 16px;
+}
+
+/* remove border when form cell is active */
+input:focus {
+    outline: none;
+}
+
+#submitBtn {
+    width: 100px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: none;
+    background-color: var(--background-light);
+    color: var(--button-text-color);
+    transition: 0.2s ease;
+}
+
+#submitBtn:hover {
+    cursor: pointer;
+    background-color: var(--background-light-hover);
+    transition: 0.05s ease;
+}
+
+.history-dropdown {
+    display: flex;
+    position: absolute;
+    background-color: var(--dropdown-background);
+    color: var(--dropdown-text-color);
+    
+}
