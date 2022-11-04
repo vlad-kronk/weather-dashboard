@@ -109,9 +109,20 @@ function updateTodayCard(cityName) {
     var fetchURL = "https://api.openweathermap.org/data/2.5/weather?q="
      + cityName + "&lang=en&units=imperial&appid=335df852494df73f05faf8726e22ed3a";
 
-    fetch(fetchURL).then((response) => response.json()).then((data) => {
+    fetch(fetchURL).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject({
+                status: response.status,
+                statusText: response.statusText
+            });
+        }
+    }).then((data) => {
 
-        // console.log(data);
+        // if there was an error message here before, replace it with default placeholder and reset color
+        searchBarEl.setAttribute("placeholder", "Search a city...");
+        searchBarEl.classList.remove("invalid-search");
 
         //update all elements in today card
         cityHeaderEl.textContent = data.name;
@@ -129,6 +140,8 @@ function updateTodayCard(cityName) {
         todayHumidityEl.textContent = "Humidity: " + data.main.humidity + "%";
         todayVisibilityEl.textContent = "Visibility: " + (data.visibility / 1000).toFixed(1) + "km";
 
+    }).catch(() => {
+        searchBarEl.value = "";
     });
 }
 
@@ -181,7 +194,16 @@ function updateForecast(cityName) {
     var fetchURL = "https://api.openweathermap.org/data/2.5/forecast?q="
     + cityName + "&units=imperial&lang=en&appid=335df852494df73f05faf8726e22ed3a";
 
-    fetch(fetchURL).then((response) => response.json()).then((data) => {
+    fetch(fetchURL).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject({
+                status: response.status,
+                statusText: response.statusText
+            });
+        }
+    }).then((data) => {
 
         // console.log(data);
 
@@ -200,12 +222,23 @@ function updateForecast(cityName) {
         for (var i = 0; i < splicedData.length; i++) {
             updateForecastCard(splicedData[i], i);
         }
+
+        // adds city to search history
+        addToSearchHistory(cityName);
         
         // show weather dash ONLY after all responses have been processed
         document.querySelector(".weather-content").classList.add("show-w");
         // searchBarEl.focus();
 
-    })
+    }).catch(error => {
+        searchBarEl.value = "";
+        if (error.status === 404) {
+            searchBarEl.setAttribute("placeholder", "City not found, try again...");
+        } else if (error.status === 400) {
+            searchBarEl.setAttribute("placeholder", "No input, try again...");
+        }
+        searchBarEl.classList.add("invalid-search");
+    });
 
 }
 
@@ -233,9 +266,6 @@ function onSearch(e) {
 
     // delete user's text
     e.target.children[0].value = "";
-
-    // add search to local history and update the UI
-    addToSearchHistory(cityName);
 
     // generates dashboard of the searched city
     updateDash(cityName);
