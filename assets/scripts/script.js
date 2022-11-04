@@ -238,7 +238,7 @@ function updateForecast(cityName) {
             searchBarEl.setAttribute("placeholder", "No input, try again...");
         }
         searchBarEl.classList.add("invalid-search");
-        submitBtnEl.style.animation = "btn-invalid 1s ease-out 1";
+        submitBtnEl.style.animation = "btn-invalid 0.5s ease-out 1";
     });
 
 }
