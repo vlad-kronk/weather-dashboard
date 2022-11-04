@@ -10,6 +10,7 @@
     --placeholder-text-color: #9A8FB7;
     --placeholder-invalid-text-color: #cf8989;
     --button-text-color: #DDDAE7;
+    --button-invalid-background-color: #9c6969;
     --date-text-color: #BCB4CF;
 }
 
@@ -259,4 +260,24 @@ input:focus {
 /* use with JS to show the weather content */
 .show-w {
     display: flex;
+}
+
+@keyframes btn-invalid {
+    from {
+        background-color: var(--button-invalid-background-color);
+    }
+
+    to {
+        background-color: var(--background-light);
+    }
+}
+
+@keyframes bar-invalid {
+    from {
+        background-color: var(--button-invalid-background-color);
+    }
+
+    to {
+        background-color: var(--background-light);
+    }
 }

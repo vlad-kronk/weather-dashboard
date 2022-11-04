@@ -238,6 +238,7 @@ function updateForecast(cityName) {
             searchBarEl.setAttribute("placeholder", "No input, try again...");
         }
         searchBarEl.classList.add("invalid-search");
+        submitBtnEl.style.animation = "btn-invalid 1s ease-out 1";
     });
 
 }
@@ -260,6 +261,7 @@ function forceTitleCase(str) {
 function onSearch(e) {
     e.preventDefault();
 
+    submitBtnEl.style.animation = "";
     var cityName = forceTitleCase(e.target.children[0].value);
 
     console.log("searched for " + cityName);
